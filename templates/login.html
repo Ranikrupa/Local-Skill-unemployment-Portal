@@ -1,6 +1,46 @@
-{% extends "base.html" %}{% block title %}Login{% endblock %}
-{% block content %}<section class="form-card"><p class="eyebrow">WELCOME BACK</p><h1>Login to SkillBridge</h1>
-<p class="muted">Students, job seekers, companies and training providers all use this login page. Your account type is recognised automatically.</p>
-<form method="post" class="stack"><label>Email address<input type="email" name="email" required></label>
-<label>Password<input type="password" name="password" required></label><button>Login</button></form>
-<p class="muted">New here? <a href="{{ url_for('register') }}">Create a student or company account</a></p></section>{% endblock %}
+
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<section class="form-card">
+    <p class="eyebrow">WELCOME BACK</p>
+    <h1>Login to SkillBridge</h1>
+
+    <p class="muted">
+        Students, job seekers, companies and training providers
+        all use this login page. Your account type is recognised automatically.
+    </p>
+
+    <form method="post" class="stack">
+        <label>
+            Email address
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter your registered email"
+                autocomplete="username"
+                required>
+        </label>
+
+        <label>
+            Password
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required>
+        </label>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p class="muted">
+        New here?
+        <a href="{{ url_for('register') }}">
+            Create a student or company account
+        </a>
+    </p>
+</section>
+{% endblock %}
