@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block title %}Create account{% endblock %}
+{% block content %}<section class="form-card"><p class="eyebrow">JOIN THE PORTAL</p><h1>Create your account</h1>
+<form method="post" class="stack">
+<label>Full name<input name="name" required></label>
+<label>Email address<input type="email" name="email" required></label>
+<label>Password (minimum 6 characters)<input type="password" name="password" minlength="6" required></label>
+<label>Register as<select name="role" id="role" required><option value="user">Student / Job seeker</option><option value="company">Company / Training provider</option></select></label>
+<label id="org-field">Company / organization name (optional)<input name="organization"></label>
+<button>Create account</button></form><p class="muted">Already registered? <a href="{{ url_for('login') }}">Login</a></p></section>{% endblock %}

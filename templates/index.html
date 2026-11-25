@@ -1,0 +1,159 @@
+
+{% extends "base.html" %}
+
+{% block title %}Explore opportunities | SkillBridge{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <p class="eyebrow">LEARN · GROW · GET HIRED</p>
+
+    <h1>
+        Find opportunities.<br>
+        <span>Build your future.</span>
+    </h1>
+
+    <p class="hero-copy">
+        Discover local jobs, internships and skill-development training in one place.
+    </p>
+
+    <!-- SEARCH AND FILTER FORM -->
+    <form class="search" method="get" action="{{ url_for('index') }}">
+
+        <input
+            type="text"
+            name="q"
+            value="{{ request.args.get('q', '') }}"
+            placeholder="Search job title, skill or location"
+        >
+
+        <select name="kind">
+            <option value="">All types</option>
+
+            {% for k in ['Job', 'Internship', 'Training'] %}
+                <option value="{{ k }}"
+                    {% if request.args.get('kind') == k %}selected{% endif %}>
+                    {{ k }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <select name="skill">
+            <option value="">All skills</option>
+
+            {% for s in skill_options %}
+                <option value="{{ s }}"
+                    {% if request.args.get('skill') == s %}selected{% endif %}>
+                    {{ s }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Search</button>
+
+        <a href="{{ url_for('index') }}" class="text-link">
+            Clear filters
+        </a>
+
+    </form>
+
+</section>
+
+
+<!-- OPPORTUNITIES SECTION -->
+
+<div class="section-heading">
+
+    <div>
+        <p class="eyebrow">DISCOVER</p>
+        <h2>Latest opportunities</h2>
+    </div>
+
+    <span>{{ opportunities|length }} found</span>
+
+</div>
+
+
+<!-- OPPORTUNITY CARDS -->
+
+<div class="cards">
+
+    {% for item in opportunities %}
+
+        <article class="op-card">
+
+            <div class="card-top">
+
+                <span class="tag {{ item.kind|lower }}">
+                    {{ item.kind }}
+                </span>
+
+                <span class="date">
+                    {{ item.created_at.strftime('%Y-%m-%d')
+                       if item.created_at and item.created_at.strftime is defined
+                       else (item.created_at[:10] if item.created_at else '') }}
+                </span>
+
+            </div>
+
+            <h3>{{ item.title }}</h3>
+
+            <p class="company">
+                {{ item.company_name or 'Company information unavailable' }}
+            </p>
+
+            <p class="muted">
+                {{ item.location }}
+            </p>
+
+            <p>
+                {{ item.description[:150] }}
+                {% if item.description|length > 150 %}…{% endif %}
+            </p>
+
+            {% if item.skills %}
+
+                <p class="skills">
+                    <strong>Skills:</strong>
+                    {{ item.skills }}
+                </p>
+
+            {% endif %}
+
+            {% if item.deadline %}
+
+                <p class="muted">
+                    <strong>Deadline:</strong> {{ item.deadline }}
+                </p>
+
+            {% endif %}
+
+            <a
+                class="text-link"
+                href="{{ url_for('opportunity_detail', opportunity_id=item.id) }}"
+            >
+                View details →
+            </a>
+
+        </article>
+
+    {% else %}
+
+        <div class="empty">
+            <h3>No opportunities found.</h3>
+            <p>
+                Try another keyword, skill or category,
+                or check again later.
+            </p>
+
+            <a href="{{ url_for('index') }}" class="text-link">
+                View all opportunities
+            </a>
+        </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

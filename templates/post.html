@@ -1,0 +1,299 @@
+
+{% extends "base.html" %}
+
+{% block title %}Post opportunity | SkillBridge{% endblock %}
+
+{% block content %}
+
+<section class="form-card wide">
+
+    <p class="eyebrow">COMPANY SPACE</p>
+
+    <h1>Publish an opportunity</h1>
+
+    <p class="muted">
+        Add a job, internship or training program.
+        Students can discover and apply for your opportunity.
+    </p>
+
+    <form method="post" class="stack" id="opportunityForm">
+
+        <!-- BASIC DETAILS -->
+
+        <h2>Basic information</h2>
+
+        <label>
+            Opportunity title
+            <input
+                type="text"
+                name="title"
+                required
+                placeholder="e.g. Python Developer Intern"
+            >
+        </label>
+
+        <label>
+            Opportunity type
+
+            <select name="kind" id="kind" required>
+                <option value="">Select type</option>
+                <option value="Job">Job</option>
+                <option value="Internship">Internship</option>
+                <option value="Training">Training</option>
+            </select>
+        </label>
+
+        <label>
+            Main skill / technology
+
+            <select name="skills" required>
+                <option value="">Choose a skill</option>
+                <option>C</option>
+                <option>C++</option>
+                <option>Java</option>
+                <option>Python</option>
+                <option>JavaScript</option>
+                <option>HTML</option>
+                <option>CSS</option>
+                <option>SQL</option>
+                <option>Web Development</option>
+                <option>Data Science</option>
+                <option>Artificial Intelligence</option>
+                <option>Machine Learning</option>
+                <option>Cloud Computing</option>
+                <option>Cybersecurity</option>
+                <option>Data Structures and Algorithms</option>
+                <option>Android Development</option>
+                <option>Networking</option>
+                <option>Other</option>
+            </select>
+        </label>
+
+        <label>
+            Other required skills
+
+            <input
+                type="text"
+                name="extra_skills"
+                placeholder="e.g. Spring Boot, MySQL, Git"
+            >
+        </label>
+
+        <label>
+            Description
+
+            <textarea
+                name="description"
+                rows="5"
+                required
+                placeholder="Describe the opportunity, responsibilities and benefits."
+            ></textarea>
+        </label>
+
+        <label>
+            Location
+
+            <input
+                type="text"
+                name="location"
+                required
+                placeholder="Bengaluru / Mangaluru / Remote"
+            >
+        </label>
+
+        <label>
+            Application deadline
+
+            <input type="date" name="deadline">
+        </label>
+
+        <hr>
+
+        <!-- ELIGIBILITY REQUIREMENTS -->
+
+        <h2>Eligibility requirements</h2>
+
+        <label>
+            Minimum qualification
+
+            <select name="qualification" required>
+                <option value="">Select qualification</option>
+                <option>10th Pass</option>
+                <option>12th Pass</option>
+                <option>Diploma</option>
+                <option>Undergraduate</option>
+                <option>Graduate</option>
+                <option>Postgraduate</option>
+                <option>Any Qualification</option>
+            </select>
+        </label>
+
+        <label>
+            Required experience
+
+            <select name="experience" required>
+                <option value="Any">Any experience</option>
+                <option value="Fresher">Freshers</option>
+                <option value="0-1 years">0-1 years</option>
+                <option value="1-2 years">1-2 years</option>
+                <option value="2-3 years">2-3 years</option>
+                <option value="3+ years">3+ years</option>
+            </select>
+        </label>
+
+        <label>
+            Additional eligibility criteria
+
+            <textarea
+                name="eligibility"
+                rows="3"
+                placeholder="e.g. Final-year students, basic programming knowledge..."
+            ></textarea>
+        </label>
+
+        <hr>
+
+        <!-- CUSTOM QUESTIONS -->
+
+        <h2>Application questions</h2>
+
+        <p class="muted">
+            Add questions that applicants must answer when applying.
+            You can add multiple relevant questions.
+        </p>
+
+        <div id="questionContainer">
+
+            <div class="question-item">
+
+                <label>
+                    Question 1
+
+                    <input
+                        type="text"
+                        name="question_text[]"
+                        placeholder="e.g. Why are you interested in this opportunity?"
+                    >
+                </label>
+
+                <label>
+                    Answer type
+
+                    <select name="question_type[]">
+                        <option value="text">Short answer</option>
+                        <option value="textarea">Detailed answer</option>
+                    </select>
+                </label>
+
+                <button
+                    type="button"
+                    class="remove-question"
+                    onclick="removeQuestion(this)"
+                >
+                    Remove question
+                </button>
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            id="addQuestion"
+        >
+            + Add another question
+        </button>
+
+        <hr>
+
+        <button type="submit">
+            Publish opportunity
+        </button>
+
+    </form>
+
+</section>
+
+<style>
+.question-item {
+    background: #f7faf9;
+    border: 1px solid #e5ecef;
+    border-radius: 10px;
+    padding: 18px;
+    display: grid;
+    gap: 12px;
+}
+
+.remove-question {
+    background: #a52b25;
+    width: fit-content;
+}
+
+.remove-question:hover {
+    background: #7f201b;
+}
+
+#addQuestion {
+    background: #176b87;
+    width: fit-content;
+}
+
+</style>
+
+<script>
+let questionCount = 1;
+
+document.getElementById("addQuestion").addEventListener("click", function () {
+
+    questionCount++;
+
+    const container = document.getElementById("questionContainer");
+
+    const question = document.createElement("div");
+
+    question.className = "question-item";
+
+    question.innerHTML = `
+        <label>
+            Question ${questionCount}
+
+            <input
+                type="text"
+                name="question_text[]"
+                placeholder="Enter your eligibility question"
+            >
+        </label>
+
+        <label>
+            Answer type
+
+            <select name="question_type[]">
+                <option value="text">Short answer</option>
+                <option value="textarea">Detailed answer</option>
+            </select>
+        </label>
+
+        <button
+            type="button"
+            class="remove-question"
+            onclick="removeQuestion(this)"
+        >
+            Remove question
+        </button>
+    `;
+
+    container.appendChild(question);
+
+});
+
+function removeQuestion(button) {
+    button.closest(".question-item").remove();
+
+    document.querySelectorAll(".question-item").forEach((item, index) => {
+        const label = item.querySelector("label");
+        label.childNodes[0].textContent = "Question " + (index + 1);
+    });
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}SkillBridge Portal{% endblock %}</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="{{ url_for('index') }}">
+        Skill<span>Bridge</span>
+    </a>
+
+    <nav>
+
+        <a href="{{ url_for('index') }}">Explore</a>
+
+        {% if session.get('user_id') %}
+
+            <a href="{{ url_for('dashboard') }}">
+                Dashboard
+            </a>
+
+            {% if session.get('role') == 'company' %}
+                <a href="{{ url_for('post_opportunity') }}">
+                    Post Opportunity
+                </a>
+            {% endif %}
+
+            <span class="welcome">
+                Hi, {{ session.get('name') }}
+            </span>
+
+            <a class="nav-button"
+               href="{{ url_for('logout') }}">
+                Logout
+            </a>
+
+        {% else %}
+
+            <a href="{{ url_for('login') }}">
+                Login
+            </a>
+
+            <a class="nav-button"
+               href="{{ url_for('register') }}">
+                Register
+            </a>
+
+        {% endif %}
+
+    </nav>
+
+</header>
+
+
+<main class="container">
+
+    <!-- FLASH MESSAGES -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% for category, message in messages %}
+
+            <div class="alert {{ category }}">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endwith %}
+
+
+    <!-- PAGE CONTENT -->
+
+    {% block content %}
+
+    {% endblock %}
+
+</main>
+
+
+<footer>
+
+    <p>
+        Local Skill Development & Employment Information Portal
+    </p>
+
+    <p>
+        Connecting skills to opportunities
+    </p>
+
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+MODIFICATIONS MADE
+==================
+1. Added skill-based filtering on the home page.
+2. Added skill categories: C, C++, Java, Python, JavaScript, HTML, CSS, SQL,
+   Web Development, Data Science, AI, Machine Learning, Cloud, Cybersecurity,
+   DSA, Android Development, Networking and Other.
+3. Company posting form now has a main skill selector and optional extra skills.
+4. Company and student accounts continue to use the existing registration and
+   login system. The login page now explains that both account types use it.
+5. Kept the existing SQLite database and table structure. No MySQL migration
+   is required for this ZIP.
+
+HOW TO RUN
+==========
+Extract the ZIP, open the LocalSkillPortal folder in VS Code, then follow
+README.txt. Existing portal.db data is not deleted.

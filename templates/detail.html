@@ -1,0 +1,261 @@
+
+{% extends "base.html" %}
+
+{% block title %}{{ item.title }} | SkillBridge{% endblock %}
+
+{% block content %}
+
+<article class="detail-card">
+
+    <!-- OPPORTUNITY DETAILS -->
+
+    <span class="tag {{ item.kind|lower }}">
+        {{ item.kind }}
+    </span>
+
+    <h1>{{ item.title }}</h1>
+
+    <p class="company">
+        {{ item.company_name }}
+    </p>
+
+    <p class="muted">
+        {{ item.location }}
+        {% if item.deadline %}
+            · Apply by {{ item.deadline }}
+        {% endif %}
+    </p>
+
+    <h3>About this opportunity</h3>
+
+    <p class="description">
+        {{ item.description }}
+    </p>
+
+    {% if item.skills %}
+        <h3>Required skills</h3>
+        <p>{{ item.skills }}</p>
+    {% endif %}
+
+    {% if item.qualification %}
+        <h3>Minimum qualification</h3>
+        <p>{{ item.qualification }}</p>
+    {% endif %}
+
+    {% if item.experience %}
+        <h3>Experience required</h3>
+        <p>{{ item.experience }}</p>
+    {% endif %}
+
+    {% if item.eligibility %}
+        <h3>Additional eligibility criteria</h3>
+        <p class="description">{{ item.eligibility }}</p>
+    {% endif %}
+
+    <hr>
+
+    <!-- APPLICATION FORM -->
+
+    {% if session.get('role') == 'user' %}
+
+        <h2>Apply for this opportunity</h2>
+
+        <p class="muted">
+            Complete the following details to submit your application.
+        </p>
+
+        <form
+            method="post"
+            enctype="multipart/form-data"
+            action="{{ url_for('apply', opportunity_id=item.id) }}"
+            class="stack"
+        >
+
+            <h3>Personal and educational details</h3>
+
+            <label>
+                Full name
+
+                <input
+                    type="text"
+                    name="applicant_name"
+                    value="{{ session.get('name', '') }}"
+                    required
+                >
+            </label>
+
+            <label>
+                Email address
+
+                <input
+                    type="email"
+                    name="email"
+                    required
+                    placeholder="Enter your email"
+                >
+            </label>
+
+            <label>
+                Phone number
+
+                <input
+                    type="tel"
+                    name="phone"
+                    required
+                    placeholder="Enter your phone number"
+                >
+            </label>
+
+            <label>
+                Highest qualification
+
+                <select name="education" required>
+                    <option value="">Select qualification</option>
+                    <option>10th Pass</option>
+                    <option>12th Pass</option>
+                    <option>Diploma</option>
+                    <option>Undergraduate</option>
+                    <option>Graduate</option>
+                    <option>Postgraduate</option>
+                    <option>Other</option>
+                </select>
+            </label>
+
+            <label>
+                College / Institution
+
+                <input
+                    type="text"
+                    name="college"
+                    placeholder="Enter college or institution"
+                >
+            </label>
+
+            <label>
+                Experience
+
+                <select name="applicant_experience" required>
+                    <option value="">Select experience</option>
+                    <option>Fresher</option>
+                    <option>Less than 1 year</option>
+                    <option>1-2 years</option>
+                    <option>2-3 years</option>
+                    <option>3+ years</option>
+                </select>
+            </label>
+
+            <!-- COMPANY QUESTIONS -->
+
+            {% if questions %}
+
+                <h3>Eligibility questions</h3>
+
+                {% for question in questions %}
+
+                    <label>
+                        {{ loop.index }}. {{ question.question_text }}
+
+                        {% if question.question_type == 'textarea' %}
+
+                            <textarea
+                                name="answer_{{ question.id }}"
+                                rows="4"
+                                required
+                                placeholder="Write your answer"
+                            ></textarea>
+
+                        {% else %}
+
+                            <input
+                                type="text"
+                                name="answer_{{ question.id }}"
+                                required
+                                placeholder="Enter your answer"
+                            >
+
+                        {% endif %}
+
+                    </label>
+
+                {% endfor %}
+
+            {% endif %}
+
+            <!-- RESUME UPLOAD -->
+
+            <h3>Resume upload</h3>
+
+            {% if item.kind in ['Job', 'Internship'] %}
+
+                <p class="muted">
+                    Resume is mandatory for this opportunity.
+                    Accepted formats: PDF and DOCX.
+                </p>
+
+                <label>
+                    Upload your resume
+
+                    <input
+                        type="file"
+                        name="resume"
+                        accept=".pdf,.docx"
+                        required
+                    >
+                </label>
+
+            {% else %}
+
+                <p class="muted">
+                    Resume is optional for training programs.
+                    Accepted formats: PDF and DOCX.
+                </p>
+
+                <label>
+                    Upload your resume (optional)
+
+                    <input
+                        type="file"
+                        name="resume"
+                        accept=".pdf,.docx"
+                    >
+                </label>
+
+            {% endif %}
+
+            <!-- ADDITIONAL MESSAGE -->
+
+            <label>
+                Additional message (optional)
+
+                <textarea
+                    name="message"
+                    rows="4"
+                    placeholder="Tell the company why you are interested."
+                ></textarea>
+            </label>
+
+            <button type="submit">
+                Submit application
+            </button>
+
+        </form>
+
+    {% elif not session.get('user_id') %}
+
+        <p>
+            <a class="button-link" href="{{ url_for('login') }}">
+                Login as a job seeker to apply
+            </a>
+        </p>
+
+    {% else %}
+
+        <p class="muted">
+            Company accounts can publish opportunities but cannot apply.
+        </p>
+
+    {% endif %}
+
+</article>
+
+{% endblock %}
